@@ -7,6 +7,7 @@ class BaseUser(BaseModel):
     id: UUID
     username: str
     user_type: str
+    group_id: UUID
 
     email: Optional[str]
     first_name: Optional[str]

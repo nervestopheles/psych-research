@@ -1,3 +1,4 @@
+from uuid import UUID
 from dto.error import BaseError
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -5,7 +6,6 @@ from sqlalchemy.orm.session import Session
 
 from routers import get_db
 from dto.user import BaseUser
-from database.models.user import User
 import services.user
 
 router = APIRouter()
@@ -17,14 +17,14 @@ router = APIRouter()
     operation_id="getUsers",
     responses={
         status.HTTP_404_NOT_FOUND: {
-            'description':'Не найдены сущности',
+            'description': 'Не найдены сущности',
             'model': BaseError
         }
     }
 )
-async def get_users(db: Session = Depends(get_db)):
+async def get_users(group_id: Optional[UUID] = None, db: Session = Depends(get_db)):
     try:
-        users = services.user.get_users(db)
+        users = services.user.get_users(group_id, db)
     except services.user.NotFoundUsers:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='NoUsers', display='Пользователей не существует').dict())

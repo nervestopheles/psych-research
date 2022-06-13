@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Optional
+from uuid import UUID
 from sqlalchemy.orm.session import Session
 from database.models.user import User
 from dto.user import BaseUser
@@ -8,8 +9,11 @@ class NotFoundUsers(Exception):
     pass
 
 
-def get_users(db: Session) -> List[BaseUser]:
-    users: List[User] = db.query(User).all()
+def get_users(group: Optional[UUID], db: Session) -> List[BaseUser]:
+    if group is None:
+        users: List[User] = db.query(User).all()
+    else:
+        users: List[User] = db.query(User).filter(User.group_id == group).all()
     if len(users) <= 0:
         raise NotFoundUsers()
 
@@ -19,7 +23,8 @@ def get_users(db: Session) -> List[BaseUser]:
         user_dto: BaseUser = BaseUser(
             id=user.id,
             username=user.username,
-            user_type="Student"
+            group_id=user.group_id,
+            user_type="Student",
         )
         users_dto.append(user_dto)
 

@@ -1,4 +1,4 @@
-from enum import unique
+from uuid import uuid4
 from sqlalchemy.dialects.postgresql import (UUID, VARCHAR, DATE)
 from sqlalchemy import (Column, ForeignKey)
 from sqlalchemy.orm import relationship
@@ -9,10 +9,12 @@ from database import base
 class User(base):
     __tablename__ = "users"
 
-    id = Column(UUID, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
     username = Column(VARCHAR(length=50), unique=True)
     password = Column(VARCHAR(length=64))
-    group = Column(VARCHAR(length=10))
+
+    group = relationship("Group")
+    group_id = Column(UUID(as_uuid=True), ForeignKey("groups.id"), index=True, default=uuid4)
 
     email = Column(VARCHAR(length=320), unique=True, nullable=True)
     phone = Column(VARCHAR(length=15), unique=True, nullable=True)
