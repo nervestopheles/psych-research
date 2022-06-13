@@ -3,10 +3,10 @@ from sqlalchemy.dialects.postgresql import (
 from sqlalchemy import (Column, ForeignKey, Table)
 from sqlalchemy.orm import relationship
 
-from db.schema import Base
+from database import base
 
 
-class CompletedTest(Base):
+class CompletedTest(base):
     __tablename__ = "completed_test"
 
     user_id = Column(UUID, ForeignKey("user.id"), primary_key=True)
@@ -19,7 +19,7 @@ class CompletedTest(Base):
     user_answers = relationship("UserAnswers")
 
 
-class UserAnswer(Base):
+class UserAnswer(base):
     __tablename__ = "user_answer"
 
     question_id = Column(UUID, ForeignKey("question.id"), primary_key=True)
@@ -35,13 +35,13 @@ class UserAnswer(Base):
 
 questions_test = Table(
     "questions_test",
-    Base.metadata,
+    base.metadata,
     Column("test_id", ForeignKey("test.id"), primary_key=True),
     Column("question_id", ForeignKey("question.id"), primary_key=True),
 )
 
 
-class Question(Base):
+class Question(base):
     __tablename__ = "question"
 
     id = Column(UUID, primary_key=True)
@@ -54,7 +54,7 @@ class Question(Base):
     )
 
 
-class Test(Base):
+class Test(base):
     __tablename__ = "test"
 
     id = Column(UUID, primary_key=True)

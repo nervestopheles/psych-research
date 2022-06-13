@@ -1,27 +1,17 @@
-from sqlalchemy.orm import Session
+import uvicorn
+from fastapi import FastAPI
 
-from db.connection import engine
-from db.tables.user import User
-from db.tables.address import Address
+from routers import user
 
-with Session(engine) as session:
+app = FastAPI(
+    title="Psych. testing API",
+    version="v0.1.0",
+    description="...",
+    docs_url="/docs",
+    redoc_url=None
+)
 
-    spongebob = User(
-        name="spongebob",
-        fullname="Spongebob Squarepants",
-        addresses=[Address(email_address="spongebob@sqlalchemy.org")],
-    )
+app.include_router(user.router)
 
-    sandy = User(
-        name="sandy",
-        fullname="Sandy Cheeks",
-        addresses=[
-            Address(email_address="sandy@sqlalchemy.org"),
-            Address(email_address="sandy@squirrelpower.org"),
-        ],
-    )
-    patrick = User(name="patrick", fullname="Patrick Star")
-
-    session.add_all([spongebob, sandy, patrick])
-
-    session.commit()
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8005)

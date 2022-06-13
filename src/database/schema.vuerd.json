@@ -3,8 +3,8 @@
     "version": "2.2.11",
     "width": 3000,
     "height": 3000,
-    "scrollTop": -1175.5,
-    "scrollLeft": -1373,
+    "scrollTop": -927.5,
+    "scrollLeft": -1509,
     "zoomLevel": 1,
     "show": {
       "tableComment": false,
@@ -212,7 +212,7 @@
           "active": false,
           "left": 2432.1523972135433,
           "top": 1041.7002181147843,
-          "zIndex": 5,
+          "zIndex": 4,
           "widthName": 60,
           "widthComment": 60
         },
@@ -247,6 +247,29 @@
             "id": "a5a01dde-d8be-439d-a965-76138e930e80"
           },
           {
+            "name": "name",
+            "comment": "",
+            "dataType": "text",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            },
+            "id": "720efff1-fbb1-46f3-b50c-9fee1fc2ce76"
+          },
+          {
             "name": "description",
             "comment": "",
             "dataType": "text",
@@ -274,7 +297,7 @@
           "active": false,
           "left": 2234.2279534937534,
           "top": 1778.4549667070496,
-          "zIndex": 3,
+          "zIndex": 10,
           "widthName": 60,
           "widthComment": 60
         },
@@ -382,7 +405,7 @@
           "active": false,
           "left": 1819.1776750220658,
           "top": 1657.5118224881962,
-          "zIndex": 8,
+          "zIndex": 6,
           "widthName": 60,
           "widthComment": 60
         },
@@ -552,7 +575,7 @@
           "active": false,
           "left": 1377.6946895636959,
           "top": 1539.3803122326613,
-          "zIndex": 6,
+          "zIndex": 5,
           "widthName": 105.74008178710938,
           "widthComment": 60
         },
@@ -745,7 +768,7 @@
           "active": false,
           "left": 2128.181969192977,
           "top": 1360.7398919381071,
-          "zIndex": 10,
+          "zIndex": 8,
           "widthName": 99.73408508300781,
           "widthComment": 60
         },
@@ -876,7 +899,7 @@
           "active": false,
           "left": 1700.3142336934857,
           "top": 1225.1663594285665,
-          "zIndex": 12,
+          "zIndex": 9,
           "widthName": 82.14505004882812,
           "widthComment": 60
         },
@@ -938,7 +961,7 @@
           "active": false,
           "left": 2045.2449220036287,
           "top": 975.0863586300625,
-          "zIndex": 4,
+          "zIndex": 3,
           "widthName": 60,
           "widthComment": 60
         },
@@ -956,7 +979,7 @@
           "active": false,
           "left": 2588.75,
           "top": 1779.75,
-          "zIndex": 9,
+          "zIndex": 7,
           "width": 127,
           "height": 100
         },
@@ -1001,18 +1024,18 @@
           "columnIds": [
             "a5a01dde-d8be-439d-a965-76138e930e80"
           ],
-          "x": 2234.2279534937534,
-          "y": 1833.4549667070496,
-          "direction": "left"
+          "x": 2403.9569879175815,
+          "y": 1908.9549667070496,
+          "direction": "bottom"
         },
         "end": {
           "tableId": "e57ea6e3-0d6f-4c8f-b893-3e8637400b01",
           "columnIds": [
             "e4074c57-1f18-4510-9e48-1b8f4be1f472"
           ],
-          "x": 2039.7264546683382,
-          "y": 2068.193294560838,
-          "direction": "top"
+          "x": 2290.4687604239534,
+          "y": 2123.193294560838,
+          "direction": "right"
         },
         "constraintName": "fk_test_to_testsquestions",
         "visible": true,
@@ -1036,7 +1059,7 @@
           "columnIds": [
             "4a0f3f28-07b0-4e7f-aec1-16c65f62f8f7"
           ],
-          "x": 2206.8879918387483,
+          "x": 2123.3072232535433,
           "y": 2068.193294560838,
           "direction": "top"
         },

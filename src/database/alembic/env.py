@@ -16,13 +16,12 @@ if config.config_file_name is not None:
 
 import sys
 sys.path = ['', '..'] + sys.path[1:]
-
-from schema import Base
+from database import base
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata
+target_metadata = base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

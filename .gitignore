@@ -161,4 +161,4 @@ cython_debug/
 
 *.swp
 
-src/db/alembic/versions/*
+src/database/alembic/versions/*
