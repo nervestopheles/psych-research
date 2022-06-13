@@ -3,16 +3,21 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class BaseUser(BaseModel):
+class BaseUserDTO(BaseModel):
     id: UUID
-    username: str
-    user_type: str
+    type_id: UUID
     group_id: UUID
+    username: str
 
-    email: Optional[str]
     first_name: Optional[str]
     last_name: Optional[str]
+    email: Optional[str]
 
 
-class User(BaseUser):
+class UserDTO(BaseUserDTO):
     password: str
+
+
+class GroupDTO(BaseModel):
+    id: UUID
+    name: str

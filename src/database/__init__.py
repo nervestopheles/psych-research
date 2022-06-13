@@ -3,10 +3,10 @@ from sqlalchemy import create_engine
 
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+
 base = declarative_base()
 
-import database.models.user
-import database.models.group
+from database.models import user, question
 
 db_url = "postgresql+psycopg2://{USER}@{HOST}:{PORT}/{DB}".format(
     USER=POSTGRES_USER,
