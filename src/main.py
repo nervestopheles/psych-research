@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from routers import question, user
+from routers import question, user, auth
 
 app = FastAPI(
     title="Psych. testing API",
@@ -11,6 +11,7 @@ app = FastAPI(
     redoc_url=None
 )
 
+app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(question.router)
 
