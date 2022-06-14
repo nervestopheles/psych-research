@@ -5,7 +5,7 @@ from uuid import UUID
 import datetime
 
 
-class ProposedAnswer(BaseModel):
+class ProposedAnswerDTO(BaseModel):
     id: UUID
     question_id: UUID
     text: str
@@ -17,9 +17,9 @@ class QuestionDTO(BaseModel):
     id: UUID
     test_id: UUID
     text: str
-    min_time: datetime.timedelta
+    min_time: Optional[datetime.timedelta]
 
-    answers: List[ProposedAnswer]
+    answers: Optional[List[ProposedAnswerDTO]]
 
 
 class TestDTO(BaseModel):

@@ -13,7 +13,7 @@ class Test(base):
     name = Column(VARCHAR(length=250), unique=True)
     description = Column(TEXT)
 
-    questoin = relationship("Question")
+    questoin = relationship("Question", cascade="all,delete",)
     completed_tests = relationship("CompletedTest")
 
 
@@ -26,9 +26,9 @@ class Question(base):
         "tests.id"), default=uuid4)
 
     text = Column(TEXT, nullable=False)
-    min_time = Column(TIME, nullable=False)
+    min_time = Column(TIME, nullable=True)
 
-    answers = relationship("ProposedAnswer")
+    answers = relationship("ProposedAnswer", cascade="all,delete",)
 
 
 class ProposedAnswer(base):

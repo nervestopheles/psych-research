@@ -161,5 +161,6 @@ cython_debug/
 
 *.swp
 *old.py
+test*.sql
 
 src/database/alembic/versions/*
