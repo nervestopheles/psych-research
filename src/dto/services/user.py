@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from sqlalchemy.orm.session import Session
 from database.models.user import User, Group
 from dto.user import BaseUserDTO, GroupDTO
-from services.exception import NotFound
+from dto.services.exception import NotFound
 
 
 def get_users(group: Optional[UUID], db: Session) -> List[BaseUserDTO]:

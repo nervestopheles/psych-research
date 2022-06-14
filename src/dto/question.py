@@ -1,15 +1,29 @@
-import uuid
+from typing import List, Optional
+from pydantic import BaseModel
+
+from uuid import UUID
 import datetime
 
-from typing import List
-from pydantic import BaseModel
+
+class ProposedAnswer(BaseModel):
+    id: UUID
+    question_id: UUID
+    text: str
+    score: int
+    description: Optional[str]
 
 
 class QuestionDTO(BaseModel):
-    id: uuid.UUID
-    question: str
+    id: UUID
+    test_id: UUID
+    text: str
     min_time: datetime.timedelta
+
+    answers: List[ProposedAnswer]
 
 
 class TestDTO(BaseModel):
+    id: UUID
+    name: str
+    description: Optional[str]
     questions: List[QuestionDTO]

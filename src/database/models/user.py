@@ -1,4 +1,5 @@
-from sqlalchemy.dialects.postgresql import (UUID, VARCHAR, DATE)
+from sqlalchemy.dialects.postgresql import (
+    UUID, VARCHAR, BOOLEAN, DATE, TIMESTAMP, TEXT)
 from sqlalchemy import (Column, ForeignKey)
 from sqlalchemy.orm import relationship
 
@@ -18,8 +19,9 @@ class User(base):
     group_id = Column(UUID(as_uuid=True), ForeignKey(
         "groups.id"), index=True, default=uuid4)
 
-    sex = relationship("Sex")
-    sex_id = Column(UUID, ForeignKey("sexs.id"), nullable=True)
+    gender = relationship("Gender")
+    gender_id = Column(UUID(as_uuid=True), ForeignKey(
+        "genders.id"), nullable=True, default=uuid4)
 
     email = Column(VARCHAR(length=320), unique=True, nullable=True)
     phone = Column(VARCHAR(length=15), unique=True, nullable=True)
@@ -28,7 +30,32 @@ class User(base):
     last_name = Column(VARCHAR(length=50), nullable=True)
     birthday = Column(DATE, nullable=True)
 
-    # completed_tests = relationship("CompletedTests")
+    completed_tests = relationship("CompletedTest")
+
+
+class CompletedTest(base):
+    __tablename__ = "completed_tests"
+    id = Column(UUID(as_uuid=True), primary_key=True,
+                index=True, default=uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), default=uuid4)
+    test_id = Column(UUID(as_uuid=True), ForeignKey("tests.id"), default=uuid4)
+    date = Column(TIMESTAMP, nullable=False)
+    passed = Column(BOOLEAN, nullable=False)
+    time = Column(TIMESTAMP, nullable=False)
+
+    answers = relationship("UserAnswers")
+
+
+class UserAnswers(base):
+    __tablename__ = "user_answers"
+    id = Column(UUID(as_uuid=True), primary_key=True,
+                index=True, default=uuid4)
+    completed_test_id = Column(UUID(as_uuid=True), ForeignKey(
+        "completed_tests.id"), default=uuid4)
+    question_id = Column(UUID(as_uuid=True), ForeignKey(
+        "questions.id"), default=uuid4)
+    answer = Column(TEXT, nullable=False)
+    time = Column(TIMESTAMP, nullable=False)
 
 
 class Group(base):
@@ -38,8 +65,8 @@ class Group(base):
     name = Column(VARCHAR(length=40), nullable=False, unique=True)
 
 
-class Sex(base):
-    __tablename__ = "sexs"
+class Gender(base):
+    __tablename__ = "genders"
 
     id = Column(UUID, primary_key=True)
     name = Column(VARCHAR(length=50), unique=True)

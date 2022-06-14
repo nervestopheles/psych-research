@@ -14,6 +14,7 @@ class Test(base):
     description = Column(TEXT)
 
     questoin = relationship("Question")
+    completed_tests = relationship("CompletedTest")
 
 
 class Question(base):

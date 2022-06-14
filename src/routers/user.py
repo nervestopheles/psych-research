@@ -6,8 +6,8 @@ from uuid import UUID
 from dto.error import BaseError
 from routers import get_db
 from dto.user import BaseUserDTO, GroupDTO
-import services.user
-from services.exception import NotFound
+import dto.services.user
+from dto.services.exception import NotFound
 
 router = APIRouter()
 
@@ -25,10 +25,10 @@ router = APIRouter()
 )
 async def get_users(group_id: Optional[UUID] = None, db: Session = Depends(get_db)):
     try:
-        users = services.user.get_users(group_id, db)
+        users = dto.services.user.get_users(group_id, db)
     except NotFound:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
-            detail='NoUsers', display='Пользователей не существует').dict())
+            detail='NoUsers', display='Пользователи не найдены.').dict())
     return users
 
 
@@ -45,7 +45,7 @@ async def get_users(group_id: Optional[UUID] = None, db: Session = Depends(get_d
 )
 async def get_groups(db: Session = Depends(get_db)):
     try:
-        groups = services.user.get_groups(db)
+        groups = dto.services.user.get_groups(db)
     except NotFound:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='NoGroups', display='Группы не найдены.').dict())
