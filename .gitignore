@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 *.swp
+*.sql
 *old.py
-test*.sql
 
 src/database/alembic/versions/*

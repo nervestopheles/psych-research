@@ -29,10 +29,13 @@ def get_users(group_id: Optional[UUID], db: Session) -> List[BaseUserDTO]:
 
         user_dto: BaseUserDTO = BaseUserDTO(
             id=user.id,
-            group_id=user.group_id,
             type_id=uuid4(),
 
             username=user.username,
+            group_id=user.group_id,
+
+            first_name=user.first_name,
+            last_name=user.last_name,
         )
         users_dto.append(user_dto)
 
