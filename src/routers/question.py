@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm.session import Session
-from typing import List
+from typing import List, Optional
+from uuid import UUID
 
 from routers import get_db
 from dto.question import TestDTO
@@ -23,9 +24,9 @@ router = APIRouter()
         }
     }
 )
-async def get_tests(db: Session = Depends(get_db)):
+async def get_tests(user_id: Optional[UUID] = None, db: Session = Depends(get_db)):
     try:
-        tests = None  # dto.services.user.get_users(group_id, db)
+        tests = dto.services.question.get_tests(user_id, db)
     except NotFound:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='NoTests', display='Нет доступных тестов для этого пользователя').dict())

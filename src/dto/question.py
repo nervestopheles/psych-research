@@ -26,4 +26,4 @@ class TestDTO(BaseModel):
     id: UUID
     name: str
     description: Optional[str]
-    questions: List[QuestionDTO]
+    questions: Optional[List[QuestionDTO]]

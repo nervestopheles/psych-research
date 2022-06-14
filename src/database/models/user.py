@@ -39,9 +39,9 @@ class CompletedTest(base):
                 index=True, default=uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), default=uuid4)
     test_id = Column(UUID(as_uuid=True), ForeignKey("tests.id"), default=uuid4)
-    date = Column(TIMESTAMP, nullable=False)
-    passed = Column(BOOLEAN, nullable=False)
-    time = Column(TIMESTAMP, nullable=False)
+    date = Column(TIMESTAMP, nullable=True)
+    passed = Column(BOOLEAN, nullable=True)
+    time = Column(TIMESTAMP, nullable=True)
 
     answers = relationship("UserAnswers")
 

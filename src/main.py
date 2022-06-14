@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from routers import user
+from routers import question, user
 
 app = FastAPI(
     title="Psych. testing API",
@@ -12,6 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(user.router)
+app.include_router(question.router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8005)

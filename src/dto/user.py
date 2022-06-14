@@ -1,6 +1,21 @@
+from datetime import datetime, timedelta
 from uuid import UUID
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
+
+
+class CompletedTestDTO(BaseModel):
+    id: UUID
+    user_id: UUID
+    test_id: UUID
+    date: datetime
+    passed: bool
+    time: timedelta
+
+
+class GroupDTO(BaseModel):
+    id: UUID
+    name: str
 
 
 class BaseUserDTO(BaseModel):
@@ -13,11 +28,8 @@ class BaseUserDTO(BaseModel):
     last_name: Optional[str]
     email: Optional[str]
 
+    completed_tests: Optional[List[CompletedTestDTO]]
+
 
 class UserDTO(BaseUserDTO):
     password: str
-
-
-class GroupDTO(BaseModel):
-    id: UUID
-    name: str
