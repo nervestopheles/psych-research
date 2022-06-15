@@ -17,7 +17,7 @@ class User(base):
 
     group = relationship("Group")
     group_id = Column(UUID(as_uuid=True), ForeignKey(
-        "groups.id"), index=True, default=uuid4)
+        "groups.id"), index=True, default=uuid4, nullable=True)
 
     gender = relationship("Gender")
     gender_id = Column(UUID(as_uuid=True), ForeignKey(

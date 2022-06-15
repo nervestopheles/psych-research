@@ -31,3 +31,22 @@ async def get_tests(user_id: Optional[UUID] = None, db: Session = Depends(get_db
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='NoTests', display='Нет доступных тестов для этого пользователя').dict())
     return tests
+
+@router.get(
+    "/test/{test_id}",
+    response_model=TestDTO,
+    operation_id="getTest",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            'description': 'Не найдены сущности',
+            'model': BaseError
+        }
+    }
+)
+async def get_test(test_id: UUID = None, db: Session = Depends(get_db)):
+    try:
+        test = dto.services.question.get_test(test_id, db)
+    except NotFound:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='NoTest', display='Тест не найден.').dict())
+    return test
