@@ -21,7 +21,7 @@ class GroupDTO(BaseModel):
 class BaseUserDTO(BaseModel):
     id: UUID
     type_id: UUID
-    group_id: UUID
+    group_id: Optional[UUID]
     username: str
 
     first_name: Optional[str]
