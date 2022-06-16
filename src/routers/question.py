@@ -32,6 +32,7 @@ async def get_tests(user_id: Optional[UUID] = None, db: Session = Depends(get_db
             detail='NoTests', display='Нет доступных тестов для этого пользователя').dict())
     return tests
 
+
 @router.get(
     "/test/{test_id}",
     response_model=TestDTO,

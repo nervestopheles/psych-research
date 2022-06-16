@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm.session import Session
 from typing import List, Optional
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from dto.question import ProposedAnswerDTO, QuestionDTO, TestDTO
 from database.models.user import CompletedTest
