@@ -9,7 +9,7 @@ from dto.user import CompletedTestDTO
 from dto.question import ProposedAnswerDTO, QuestionDTO
 from database.models.user import CompletedTest, User, UserAnswers
 from database.models.question import ProposedAnswer, Question, Test
-from dto.services.exception import AnswerNotFound, NotFound, QuestionNotFound, TestCompleted, TestNotFound, UserNotFound
+from dto.services.exception import AnswerAlreadyRecorded, AnswerNotFound, NotFound, QuestionNotFound, TestCompleted, TestNotFound, UserNotFound
 
 
 def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[CompletedTestDTO, List[QuestionDTO]]:
@@ -103,13 +103,18 @@ def confirm_answer(
         raise TestNotFound()
     if db.query(Question).filter(Question.id == question_id).first() == None:
         raise QuestionNotFound()
-    if db.query(ProposedAnswer).filter(Question.id == question_id, ProposedAnswer.text == answer).first() == None:
+
+    proposed_answer = db.query(ProposedAnswer).filter(Question.id == question_id, ProposedAnswer.score == answer).first()
+    if proposed_answer == None:
         raise AnswerNotFound()
+
+    if db.query(UserAnswers).filter(UserAnswers.question_id == question_id).first() != None:
+        raise AnswerAlreadyRecorded()
 
     user_answer: UserAnswers = UserAnswers(
         question_id=question_id,
         completed_test_id=completed_test_id,
-        answer=answer
+        answer=proposed_answer.text
     )
     db.add(user_answer)
     db.flush()

@@ -3,12 +3,13 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm.session import Session
 from typing import List, Tuple
 from uuid import UUID
+from database.models.user import UserAnswers
 
 from routers import get_db
 from dto.user import CompletedTestDTO
 from dto.question import QuestionDTO
 from dto.error import BaseError
-from dto.services.exception import NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
+from dto.services.exception import AnswerAlreadyRecorded, NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
 
 import dto.services.answer
 
@@ -41,6 +42,12 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
             detail='TestNotFound', display='Тест не найден.').dict())
     return questions
 
+@router.get(
+    "/answers",
+    response_model=CompletedTestDTO
+)
+async def foo():
+    pass
 
 @router.post(
     "/answer",
@@ -56,7 +63,7 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
 async def confirm_answer(
     completed_test_id: UUID,
     question_id: UUID,
-    answer: str,
+    answer: int,
     db: Session = Depends(get_db)
 ):
     try:
@@ -71,4 +78,7 @@ async def confirm_answer(
     except QuestionNotFound:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='QuestionNotAnswer', display='Вопрос не найден.').dict())
+    except AnswerAlreadyRecorded:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='AnswerAlreadyRecorded', display='Ответ уже записан.').dict())
     return sts

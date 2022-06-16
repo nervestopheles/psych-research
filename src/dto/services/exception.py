@@ -18,5 +18,9 @@ class AnswerNotFound(Exception):
     pass
 
 
+class AnswerAlreadyRecorded(Exception):
+    pass
+
+
 class TestCompleted(Exception):
     pass
