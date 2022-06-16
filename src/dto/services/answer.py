@@ -24,7 +24,7 @@ def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[C
         CompletedTest.test_id == test_id
     ).all()
 
-    if len(completeds) == 0 or any(completed.passed is None for completed in completeds):
+    if len(completeds) == 0 or all(completed.passed is None for completed in completeds):
         completed = CompletedTest(
             user_id=user_id,
             test_id=test_id,
@@ -107,7 +107,10 @@ def confirm_answer(
     if proposed_answer == None:
         raise AnswerNotFound()
 
-    if db.query(UserAnswers).filter(UserAnswers.question_id == question_id).first() != None:
+    if db.query(UserAnswers).filter(
+        UserAnswers.question_id == question_id,
+        UserAnswers.completed_test_id == completed_test_id
+    ).first() != None:
         raise AnswerAlreadyRecorded()
 
     user_answer: UserAnswers = UserAnswers(

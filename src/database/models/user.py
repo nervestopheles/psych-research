@@ -30,7 +30,7 @@ class User(base):
     last_name = Column(VARCHAR(length=50), nullable=True)
     birthday = Column(DATE, nullable=True)
 
-    completed_tests = relationship("CompletedTest")
+    completed_tests = relationship("CompletedTest", cascade="all,delete")
 
 
 class CompletedTest(base):
@@ -43,7 +43,7 @@ class CompletedTest(base):
     passed = Column(BOOLEAN, nullable=True)
     time = Column(TIMESTAMP, nullable=True)
 
-    answers = relationship("UserAnswers")
+    answers = relationship("UserAnswers", cascade="all,delete")
 
 
 class UserAnswers(base):

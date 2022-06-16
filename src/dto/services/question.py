@@ -23,7 +23,7 @@ def get_tests(user_id: Optional[UUID], db: Session) -> List[TestDTO]:
         ).filter(
             or_(
                 CompletedTest.id == None,
-                CompletedTest.passed == False
+                CompletedTest.passed == False,
             )
         ).all()
 

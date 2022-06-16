@@ -9,7 +9,7 @@ from routers import get_db
 from dto.user import CompletedTestDTO
 from dto.question import QuestionDTO
 from dto.error import BaseError
-from dto.services.exception import AnswerAlreadyRecorded, AnswersNotEnd, NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
+from dto.services.exception import AnswerAlreadyRecorded, AnswersNotEnd, NotFound, AnswerNotFound, QuestionNotFound, TestCompleted, UserNotFound, TestNotFound
 
 import dto.services.answer
 
@@ -40,6 +40,9 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
     except TestNotFound:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='TestNotFound', display='Тест не найден.').dict())
+    except TestCompleted:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='TestCompleted', display='Тест завершен.').dict())
     return questions
 
 
