@@ -1,4 +1,5 @@
 import http
+import datetime
 from fastapi import status
 from sqlalchemy import and_
 from sqlalchemy.orm.session import Session
@@ -9,7 +10,7 @@ from dto.user import CompletedTestDTO
 from dto.question import ProposedAnswerDTO, QuestionDTO
 from database.models.user import CompletedTest, User, UserAnswers
 from database.models.question import ProposedAnswer, Question, Test
-from dto.services.exception import AnswerAlreadyRecorded, AnswerNotFound, NotFound, QuestionNotFound, TestCompleted, TestNotFound, UserNotFound
+from dto.services.exception import AnswerAlreadyRecorded, AnswerNotFound, AnswersNotEnd, NotFound, QuestionNotFound, TestCompleted, TestNotFound, UserNotFound
 
 
 def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[CompletedTestDTO, List[QuestionDTO]]:
@@ -104,7 +105,8 @@ def confirm_answer(
     if db.query(Question).filter(Question.id == question_id).first() == None:
         raise QuestionNotFound()
 
-    proposed_answer = db.query(ProposedAnswer).filter(Question.id == question_id, ProposedAnswer.score == answer).first()
+    proposed_answer = db.query(ProposedAnswer).filter(
+        Question.id == question_id, ProposedAnswer.score == answer).first()
     if proposed_answer == None:
         raise AnswerNotFound()
 
@@ -119,5 +121,21 @@ def confirm_answer(
     db.add(user_answer)
     db.flush()
     db.commit()
+
+    return status.HTTP_204_NO_CONTENT
+
+
+def answer_end(user_id: UUID, test_id: UUID, db: Session) -> http.HTTPStatus:
+
+    questions: Tuple[CompletedTestDTO,
+                     List[QuestionDTO]] = get_questions_for_user(user_id, test_id, db)
+    if len(questions[1]) == 0:
+        questions[0].passed = True
+        questions[0].date = datetime.now()
+        db.add(questions[0])
+        db.flush()
+        db.commit()
+    else:
+        raise AnswersNotEnd()
 
     return status.HTTP_204_NO_CONTENT

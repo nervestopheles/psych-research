@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get(
     "/auth",
     response_model=BaseUserDTO,
-    operation_id="getUsers",
+    operation_id="getUserData",
     responses={
         status.HTTP_401_UNAUTHORIZED: {
             'description': 'Не авторизован.',

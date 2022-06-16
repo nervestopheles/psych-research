@@ -22,5 +22,9 @@ class AnswerAlreadyRecorded(Exception):
     pass
 
 
+class AnswersNotEnd(Exception):
+    pass
+
+
 class TestCompleted(Exception):
     pass

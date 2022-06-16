@@ -9,7 +9,7 @@ from routers import get_db
 from dto.user import CompletedTestDTO
 from dto.question import QuestionDTO
 from dto.error import BaseError
-from dto.services.exception import AnswerAlreadyRecorded, NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
+from dto.services.exception import AnswerAlreadyRecorded, AnswersNotEnd, NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
 
 import dto.services.answer
 
@@ -42,12 +42,14 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
             detail='TestNotFound', display='Тест не найден.').dict())
     return questions
 
+
 @router.get(
     "/answers",
     response_model=CompletedTestDTO
 )
 async def foo():
     pass
+
 
 @router.post(
     "/answer",
@@ -81,4 +83,29 @@ async def confirm_answer(
     except AnswerAlreadyRecorded:
         raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
             detail='AnswerAlreadyRecorded', display='Ответ уже записан.').dict())
+    return sts
+
+
+@router.post(
+    "/answer/end",
+    response_model=http.HTTPStatus,  # status code 204
+    operation_id="setAnswerEnd",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            'description': 'Не найдены сущности',
+            'model': BaseError
+        }
+    }
+)
+async def answer_end(
+    user_id: UUID,
+    test_id: UUID,
+    db: Session = Depends(get_db)
+):
+    try:
+        sts = dto.services.answer.answer_end(
+            user_id, test_id, db)
+    except AnswersNotEnd:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='AnswersNotEnd', display='Тест еще не закончен.').dict())
     return sts
