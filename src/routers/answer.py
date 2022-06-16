@@ -8,7 +8,7 @@ from routers import get_db
 from dto.user import CompletedTestDTO
 from dto.question import QuestionDTO
 from dto.error import BaseError
-from dto.services.exception import NotFound, UserNotFound, TestNotFound
+from dto.services.exception import NotFound, AnswerNotFound, QuestionNotFound, UserNotFound, TestNotFound
 
 import dto.services.answer
 
@@ -45,7 +45,30 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
 @router.post(
     "/answer",
     response_model=http.HTTPStatus,  # status code 204
-    operation_id="setAnswer"
+    operation_id="setAnswer",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            'description': 'Не найдены сущности',
+            'model': BaseError
+        }
+    }
 )
-async def confirm_answer(db: Session = Depends(get_db)):
-    return status.HTTP_204_NO_CONTENT
+async def confirm_answer(
+    completed_test_id: UUID,
+    question_id: UUID,
+    answer: str,
+    db: Session = Depends(get_db)
+):
+    try:
+        sts = dto.services.answer.confirm_answer(
+            completed_test_id, question_id, answer, db)
+    except AnswerNotFound:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='NoValidAnswer', display='Не существующий ответ.').dict())
+    except TestNotFound:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='TestNotFound', display='Тест не найден.').dict())
+    except QuestionNotFound:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, BaseError(
+            detail='QuestionNotAnswer', display='Вопрос не найден.').dict())
+    return sts

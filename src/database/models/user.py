@@ -55,7 +55,7 @@ class UserAnswers(base):
     question_id = Column(UUID(as_uuid=True), ForeignKey(
         "questions.id"), default=uuid4)
     answer = Column(TEXT, nullable=False)
-    time = Column(TIMESTAMP, nullable=False)
+    time = Column(TIMESTAMP, nullable=True)
 
 
 class Group(base):

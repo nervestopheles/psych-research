@@ -1,3 +1,5 @@
+import http
+from fastapi import status
 from sqlalchemy import and_
 from sqlalchemy.orm.session import Session
 from typing import List, Tuple
@@ -7,7 +9,7 @@ from dto.user import CompletedTestDTO
 from dto.question import ProposedAnswerDTO, QuestionDTO
 from database.models.user import CompletedTest, User, UserAnswers
 from database.models.question import ProposedAnswer, Question, Test
-from dto.services.exception import TestCompleted, TestNotFound, UserNotFound
+from dto.services.exception import AnswerNotFound, NotFound, QuestionNotFound, TestCompleted, TestNotFound, UserNotFound
 
 
 def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[CompletedTestDTO, List[QuestionDTO]]:
@@ -88,3 +90,29 @@ def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[C
     )
 
     return (completed_dto, questions_dto)
+
+
+def confirm_answer(
+    completed_test_id: UUID,
+    question_id: UUID,
+    answer: str,
+    db: Session
+) -> http.HTTPStatus:
+
+    if db.query(CompletedTest).filter(CompletedTest.id == completed_test_id).first() == None:
+        raise TestNotFound()
+    if db.query(Question).filter(Question.id == question_id).first() == None:
+        raise QuestionNotFound()
+    if db.query(ProposedAnswer).filter(Question.id == question_id, ProposedAnswer.text == answer).first() == None:
+        raise AnswerNotFound()
+
+    user_answer: UserAnswers = UserAnswers(
+        question_id=question_id,
+        completed_test_id=completed_test_id,
+        answer=answer
+    )
+    db.add(user_answer)
+    db.flush()
+    db.commit()
+
+    return status.HTTP_204_NO_CONTENT
