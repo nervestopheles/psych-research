@@ -4,7 +4,7 @@ from typing import List, Tuple
 from uuid import UUID
 
 from dto.user import CompletedTestDTO
-from dto.question import ProposedAnswerDTO, QuestionDTO, TestDTO
+from dto.question import ProposedAnswerDTO, QuestionDTO
 from database.models.user import CompletedTest, User, UserAnswers
 from database.models.question import ProposedAnswer, Question, Test
 from dto.services.exception import TestCompleted, TestNotFound, UserNotFound
@@ -78,4 +78,13 @@ def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[C
         )
         questions_dto.append(question_dto)
 
-    return tuple[completed, questions_dto]
+    completed_dto: CompletedTestDTO = CompletedTestDTO(
+        id=completed.id,
+        user_id=completed.user_id,
+        test_id=completed.test_id,
+        passed=completed.passed,
+        date=completed.date,
+        time=completed.time
+    )
+
+    return (completed_dto, questions_dto)

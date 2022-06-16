@@ -1,4 +1,5 @@
-from sqlalchemy import and_
+from operator import or_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm.session import Session
 from typing import List, Optional
 from uuid import UUID
@@ -20,7 +21,10 @@ def get_tests(user_id: Optional[UUID], db: Session) -> List[TestDTO]:
                 CompletedTest.user_id == user_id
             )
         ).filter(
-            CompletedTest.id == None
+            or_(
+                CompletedTest.id == None,
+                CompletedTest.passed == False
+            )
         ).all()
 
     # TODO: сделать not found exception

@@ -48,4 +48,4 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
     operation_id="setAnswer"
 )
 async def confirm_answer(db: Session = Depends(get_db)):
-    pass
+    return status.HTTP_204_NO_CONTENT

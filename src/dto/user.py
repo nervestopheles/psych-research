@@ -8,9 +8,9 @@ class CompletedTestDTO(BaseModel):
     id: UUID
     user_id: UUID
     test_id: UUID
-    date: datetime
     passed: bool
-    time: timedelta
+    date: Optional[datetime]
+    time: Optional[timedelta]
 
 
 class GroupDTO(BaseModel):
