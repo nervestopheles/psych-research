@@ -1,7 +1,6 @@
 import http
-import datetime
+from datetime import datetime
 from fastapi import status
-from sqlalchemy import and_
 from sqlalchemy.orm.session import Session
 from typing import List, Tuple
 from uuid import UUID
@@ -45,10 +44,7 @@ def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[C
 
     questions: List[Question] = db.query(Question).outerjoin(
         UserAnswers,
-        and_(
-            UserAnswers.question_id == Question.id,
-            UserAnswers.completed_test_id == completed.id
-        )
+        UserAnswers.completed_test_id == completed.id
     ).filter(
         Question.test_id == test_id,
         UserAnswers.id == None
@@ -60,6 +56,7 @@ def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session) -> Tuple[C
         proposed_answers: List[ProposedAnswer] = db.query(ProposedAnswer).filter(
             ProposedAnswer.quiestion_id == question.id
         ).all()
+
         proposed_answers_dto: List[ProposedAnswerDTO] = []
         for answ in proposed_answers:
 
@@ -130,10 +127,12 @@ def answer_end(user_id: UUID, test_id: UUID, db: Session) -> http.HTTPStatus:
     questions: Tuple[CompletedTestDTO,
                      List[QuestionDTO]] = get_questions_for_user(user_id, test_id, db)
     if len(questions[1]) == 0:
-        questions[0].passed = True
-        questions[0].date = datetime.now()
-        db.add(questions[0])
-        db.flush()
+        db.query(CompletedTest).filter(CompletedTest.id == questions[0].id).update(
+            {
+                CompletedTest.passed: True,
+                CompletedTest.date: datetime.now()
+            }
+        )
         db.commit()
     else:
         raise AnswersNotEnd()
