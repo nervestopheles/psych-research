@@ -8,7 +8,9 @@ class UserAnswerDto(BaseModel):
     id: UUID
     completed_test_id: UUID
     question_id: UUID
+    question: str
     answer: str
+    score: int
 
 
 class CompletedTestDTO(BaseModel):

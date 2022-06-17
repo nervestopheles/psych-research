@@ -163,8 +163,17 @@ def get_user_answers(user_id: UUID, db: Session) -> List[CompletedTestDTO]:
 
         answs_dto = []
         for answ in answs:
+            q = db.query(Question).filter(Question.id == answ.question_id).first()
+            a = db.query(ProposedAnswer).filter(
+                and_(
+                    ProposedAnswer.quiestion_id == answ.question_id,
+                    ProposedAnswer.text == answ.answer
+                )
+            ).first()
             answ_dto = UserAnswerDto(
                 id=answ.id,
+                question=q.text,
+                score=a.score,
                 completed_test_id=answ.completed_test_id,
                 question_id=answ.completed_test_id,
                 answer=answ.answer,
