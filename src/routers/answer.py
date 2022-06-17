@@ -48,10 +48,18 @@ async def get_questions_for_user(user_id: UUID, test_id: UUID, db: Session = Dep
 
 @router.get(
     "/answers",
-    response_model=CompletedTestDTO
+    response_model=List[CompletedTestDTO],
+    operation_id="getUserAnswers",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            'description': 'Не найдены сущности',
+            'model': BaseError
+        }
+    }
 )
-async def foo():
-    pass
+async def get_user_answers(user_id: UUID, db: Session = Depends(get_db)):
+    answs = dto.services.answer.get_user_answers(user_id, db)
+    return answs
 
 
 @router.post(

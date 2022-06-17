@@ -1,11 +1,12 @@
 import http
 from datetime import datetime
 from fastapi import status
+from sqlalchemy import and_
 from sqlalchemy.orm.session import Session
 from typing import List, Tuple
 from uuid import UUID
 
-from dto.user import CompletedTestDTO
+from dto.user import CompletedTestDTO, UserAnswerDto
 from dto.question import ProposedAnswerDTO, QuestionDTO
 from database.models.user import CompletedTest, User, UserAnswers
 from database.models.question import ProposedAnswer, Question, Test
@@ -141,3 +142,43 @@ def answer_end(user_id: UUID, test_id: UUID, db: Session) -> http.HTTPStatus:
         raise AnswersNotEnd()
 
     return status.HTTP_204_NO_CONTENT
+
+
+def get_user_answers(user_id: UUID, db: Session) -> List[CompletedTestDTO]:
+    tests: List[CompletedTest] = db.query(CompletedTest).filter(
+        and_(
+            CompletedTest.user_id == user_id,
+            CompletedTest.passed == True
+        )
+    ).all()
+
+    if len(tests) == 0:
+        return []
+
+    tests_dto = []
+    for test in tests:
+        answs: List[UserAnswers] = db.query(UserAnswers).filter(
+            UserAnswers.completed_test_id == test.id
+        ).all()
+
+        answs_dto = []
+        for answ in answs:
+            answ_dto = UserAnswerDto(
+                id=answ.id,
+                completed_test_id=answ.completed_test_id,
+                question_id=answ.completed_test_id,
+                answer=answ.answer,
+            )
+            answs_dto.append(answ_dto)
+
+        test_dto = CompletedTestDTO(
+            id=test.id,
+            user_id=test.user_id,
+            test_id=test.test_id,
+            passed=test.passed,
+            date=test.date,
+            answers=answs_dto
+        )
+        tests_dto.append(test_dto)
+
+    return tests_dto

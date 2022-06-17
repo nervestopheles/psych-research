@@ -4,6 +4,13 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
+class UserAnswerDto(BaseModel):
+    id: UUID
+    completed_test_id: UUID
+    question_id: UUID
+    answer: str
+
+
 class CompletedTestDTO(BaseModel):
     id: UUID
     user_id: UUID
@@ -11,6 +18,8 @@ class CompletedTestDTO(BaseModel):
     passed: bool
     date: Optional[datetime]
     time: Optional[timedelta]
+
+    answers: Optional[List[UserAnswerDto]]
 
 
 class GroupDTO(BaseModel):
